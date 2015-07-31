@@ -1,0 +1,15 @@
+﻿@model Marvel.Models.Index
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Marvel Comics </h1>
+    <p class="lead">Access info about your favorite Comics and Comic Creators here, thanks to the Marvel Developer API.</p>
+    <p><a href="http://developer.marvel.com" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+
+
+@{Html.RenderPartial("ComicListDisplay", Model.comicDataContainer);}

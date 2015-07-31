@@ -1,0 +1,11 @@
+﻿@model Marvel.Models.Comic
+
+
+
+<div class="thumbnail">
+    <img src="@(comic.thumbnail.path + "/standard_fantastic." +comic.thumbnail.extension)" alt="image">
+    <div class="caption">
+        <h3>@comic.title</h3>
+        <p>@comic.description</p>
+    </div>
+</div>
