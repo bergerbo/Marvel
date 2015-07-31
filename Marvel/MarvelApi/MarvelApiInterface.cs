@@ -13,7 +13,7 @@ namespace Marvel.MarvelApi
     {
         private static string publicKey;
         private static string privateKey;
-        private static string endPoint = "http://gateway.marvel.com/";
+        private static string endPoint = "http://gateway.marvel.com";
         private static MD5 mdhash;
 
         public static void Init()
@@ -45,23 +45,47 @@ namespace Marvel.MarvelApi
 
         public static ComicDataWrapper getComics(int limit, int offset, string order)
         {
+            string url = String.Format("{0}/v1/public/comics?orderBy={1}&limit={2}&offset={3}",endPoint, order, limit, offset);
+            WebResponse response = apiCall(url, true);
+
+            return parseAsComicDataWrapper(response);
+
+        }
+
+
+        public static ComicDataWrapper getComic(int id)
+        {
+            string url = String.Format("{0}/v1/public/comics/{1}", endPoint, id);
+            WebResponse response = apiCall(url, false);
+
+            return parseAsComicDataWrapper(response);
+
+        }
+
+        private static WebResponse apiCall(string url, bool withParams)
+        {
             KeyHash keyHash = generateKeyHash();
-            string parameters = String.Format("orderBy={0}&limit={1}&offset={2}&{3}", order, limit, offset, keyHash.asParams());
-            string url = endPoint + "v1/public/comics?" + parameters;
-            WebRequest request = WebRequest.Create(url);
+            char separator = withParams ? '&' : '?';
+            string finalUrl = String.Format("{0}{1}{2}", url, separator, keyHash.asParams());
+            WebRequest request = WebRequest.Create(finalUrl);
             request.Method = "GET";
             WebResponse response = request.GetResponse();
+            return response;
+        }
 
+        private static ComicDataWrapper parseAsComicDataWrapper(WebResponse response)
+        {
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 string result = reader.ReadToEnd();
                 JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
                 jsonSettings.MaxDepth = 10;
                 jsonSettings.DateParseHandling = DateParseHandling.DateTime;
-                ComicDataWrapper cdw = JsonConvert.DeserializeObject<ComicDataWrapper>(result,jsonSettings);
+                ComicDataWrapper cdw = JsonConvert.DeserializeObject<ComicDataWrapper>(result, jsonSettings);
                 return cdw;
             }
         }
+
 
         public class KeyHash
         {

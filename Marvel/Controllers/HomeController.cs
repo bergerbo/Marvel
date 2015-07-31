@@ -13,7 +13,7 @@ namespace Marvel.Controllers
     {
         public ActionResult Index()
         {
-            ComicDataWrapper cdw = MarvelApiInterface.getComics(4,0,"-issueNumber");
+            ComicDataWrapper cdw = MarvelApiInterface.getComics(4,0,"-focDate");
             Index model = new Index { comicDataContainer = cdw.data } ;
             return View(model);
         }

@@ -1,11 +1,11 @@
 ﻿@model Marvel.Models.Comic
 
-
-
 <div class="thumbnail">
-    <img src="@(comic.thumbnail.path + "/standard_fantastic." +comic.thumbnail.extension)" alt="image">
+    <img src="@(Model.thumbnail.path + "/standard_fantastic." + Model.thumbnail.extension)" alt="image">
     <div class="caption">
-        <h3>@comic.title</h3>
-        <p>@comic.description</p>
+        <h3>@Model.title</h3>
+        <p>@Model.description</p>
     </div>
+
+    @Html.ActionLink("go!", "Details", "Comic", new { id = Model.id}, null)
 </div>
