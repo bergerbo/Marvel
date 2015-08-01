@@ -1,0 +1,43 @@
+﻿@using Marvel.Models
+@using Marvel.MarvelApi
+@model Marvel.Models.Comic
+
+@{
+    ViewBag.Title = Model.title;
+}
+
+<div>
+    <div class="row">
+        <div class="col-xs-0 col-lg-1"></div>
+        <div class="col-md-6 col-lg-5 left-col">
+            <img src="@(Model.thumbnail.path + "/detail." + Model.thumbnail.extension)" alt="image" />
+        </div>
+        <div class="col-md-6 col-lg-5">
+            <div class="jumbotron right-col">
+                <h2>@Model.title</h2>
+                <div>
+                    @Model.description
+                </div>
+            </div>
+            <ul class="list-group">
+                @foreach (ComicDate date in Model.dates)
+                {
+                    <li class="list-group-item">
+                        <p>@MarvelApiHelper.UppercaseFirst(date.type) : @(MarvelApiHelper.DisplayDate(date.date))</p> 
+                    </li>
+                }
+            </ul>
+            <div class="list-group">
+                @foreach(CreatorSummary creator in Model.creators.items)
+                {
+                    <a href="@Url.Action("Creator", "Creators", 
+                            new { id = MarvelApiHelper.extractId(creator.resourceURI)})" 
+                        class="list-group-item">                              
+                        <p>@creator.name : @MarvelApiHelper.UppercaseFirst(creator.role)</p>
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="col-xs-0 col-lg-1"></div>
+    </div>
+</div>

@@ -120,15 +120,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ComicController.cs" />
+    <Compile Include="Controllers\ComicsController.cs" />
+    <Compile Include="Controllers\CreatorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ComicDataContainer.cs" />
-    <Compile Include="Models\ComicDataWrapper.cs" />
+    <Compile Include="MarvelApi\MarvelApiHelper.cs" />
+    <Compile Include="Models\Creator.cs" />
     <Compile Include="MarvelApi\MarvelApiInterface.cs" />
     <Compile Include="Models\Comic.cs" />
+    <Compile Include="Models\DataContainer.cs" />
+    <Compile Include="Models\DataWrapper.cs" />
     <Compile Include="Models\Index.cs" />
     <Compile Include="Models\SharedDictionaries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,12 +168,13 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\ComicListDisplay.cshtml" />
+    <Content Include="Views\Shared\_ComicListDisplay.cshtml" />
     <Content Include="Views\Shared\_ComicThumbnail.cshtml" />
-    <Content Include="Views\Comic\Details.cshtml" />
+    <Content Include="Views\Comics\Comic.cshtml" />
+    <Content Include="Views\Shared\_CreatorListDisplay.cshtml" />
+    <Content Include="Views\Shared\_CreatorThumbnail.cshtml" />
+    <Content Include="Views\Creators\Creator.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

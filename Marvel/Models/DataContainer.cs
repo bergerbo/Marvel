@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Marvel.Models;
 
 namespace Marvel.Models
 {
-    public class ComicDataContainer
+    public class DataContainer<Data>
     {
         public int? offset;
         public int? limit;
         public int? total;
         public int? count;
-        public Comic[] results;
+        public Data[] results;
     }
 }

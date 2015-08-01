@@ -7,6 +7,7 @@ namespace Marvel.Models
 {
     public class Index
     {
-        public ComicDataContainer comicDataContainer;
+        public DataContainer<Comic> comicDataContainer;
+        public DataContainer<Creator> creatorDataContainer;
     }
 }

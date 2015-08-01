@@ -13,22 +13,6 @@ namespace Marvel.Controllers
     {
         public ActionResult Index()
         {
-            ComicDataWrapper cdw = MarvelApiInterface.getComics(4,0,"-focDate");
-            Index model = new Index { comicDataContainer = cdw.data } ;
-            return View(model);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-           
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

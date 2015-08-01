@@ -1,0 +1,41 @@
+﻿@using Marvel.MarvelApi
+@using Marvel.Models
+@model Marvel.Models.Creator
+
+@{
+    ViewBag.Title = Model.fullName;
+}
+
+<div class="row">
+    <div class="col-xs-0 col-lg-1"></div>
+    <div class="col-md-6 col-lg-5 left-col">
+        <img src="@(Model.thumbnail.path + "/detail." + Model.thumbnail.extension)" alt="image" />
+    </div>
+    <div class="col-md-6 col-lg-5">
+        <div class="jumbotron right-col">
+            <h2>@(Model.fullName) </h2>
+            <div>
+                <h5> Worked on</h5>
+                <ul>
+                    @foreach (SeriesSummary serie in Model.series.items)
+                    {
+                        <li> @serie.name </li>  }
+                    @if (Model.series.returned < Model.series.available)
+                    {
+                        <li> And More !</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-0 col-lg-1"></div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Comics</h3>
+    </div>
+    <div class="panel-body container-fluid">
+        @(Html.Action("ComicsForCreator", "Comics", new { creatorId = Model.id, order = "-focDate", limit = 20, offset = 0 }))
+    </div>
+</div>

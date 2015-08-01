@@ -5,11 +5,28 @@
 }
 
 <div class="jumbotron">
-    <h1>Marvel Comics </h1>
+    <h1>Marvel Comics & Creators </h1>
     <p class="lead">Access info about your favorite Comics and Comic Creators here, thanks to the Marvel Developer API.</p>
-    <p><a href="http://developer.marvel.com" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <p><a href="http://developer.marvel.com" class="btn btn-primary btn-lg">Learn more about the API &raquo;</a></p>
 </div>
 
 
 
-@{Html.RenderPartial("ComicListDisplay", Model.comicDataContainer);}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Recent Comics</h3>
+    </div>
+    <div class="panel-body container-fluid">
+        @(Html.Action("Comics", "Comics", new { order = "-focDate", limit = 4, offset = 0 }))
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Active Creators</h3>
+    </div>
+    <div class="panel-body container-fluid">
+        @(Html.Action("Creators", "Creators", new { order = "-modified", limit = 4, offset = 0 }))
+    </div>
+</div>
+

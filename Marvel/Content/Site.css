@@ -4,10 +4,10 @@
 }
 
 /* Set padding to keep content from hitting the edges */
-.body-content {
+/*.body-content {
     padding-left: 15px;
     padding-right: 15px;
-}
+}*/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -15,6 +15,34 @@
 .dl-horizontal dt {
     white-space: normal;
 }
+
+.right-col, .left-col {
+    margin-top:40px;
+}
+
+.thumbnail {
+    overflow:hidden
+}
+
+.thumbnail .comic {
+    height: 300px;
+}
+
+.thumbnail .creator {
+    height: 280px;
+}
+
+
+.thumbnail h4, .thumbnail p {
+    white-space:nowrap;
+    overflow:hidden;    
+    text-overflow:ellipsis;
+}
+
+.left-col img {
+    width:100%;
+}
+
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,

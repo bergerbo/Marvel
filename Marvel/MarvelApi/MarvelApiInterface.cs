@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.IO;
 using Marvel.Models;
+using System.Web.Script.Serialization;
 
 namespace Marvel.MarvelApi
 {
@@ -14,6 +15,7 @@ namespace Marvel.MarvelApi
         private static string publicKey;
         private static string privateKey;
         private static string endPoint = "http://gateway.marvel.com";
+
         private static MD5 mdhash;
 
         public static void Init()
@@ -43,22 +45,52 @@ namespace Marvel.MarvelApi
             return keyHash;
         }
 
-        public static ComicDataWrapper getComics(int limit, int offset, string order)
+        public static DataWrapper<Creator> getCreators(string order, int limit, int offset)
+        {
+            string url = String.Format("{0}/v1/public/creators?orderBy={1}&limit={2}&offset={3}", endPoint, order, limit, offset);
+            WebResponse response = apiCall(url, true);
+
+            return parseAsDataWrapper<Creator>(response);
+        }
+
+        public static DataWrapper<Creator> getCreator(int id)
+        {
+            string url = String.Format("{0}/v1/public/creators/{1}", endPoint, id);
+            WebResponse response = apiCall(url, false);
+
+            return parseAsDataWrapper<Creator>(response);
+        }
+
+        internal static DataWrapper<Creator> getCreator(string url)
+        {
+            WebResponse response = apiCall(url, false);
+
+            return parseAsDataWrapper<Creator>(response);
+        }
+
+        public static DataWrapper<Comic> getComics(string order, int limit, int offset)
         {
             string url = String.Format("{0}/v1/public/comics?orderBy={1}&limit={2}&offset={3}",endPoint, order, limit, offset);
             WebResponse response = apiCall(url, true);
 
-            return parseAsComicDataWrapper(response);
-
+            return parseAsDataWrapper<Comic>(response);
         }
 
 
-        public static ComicDataWrapper getComic(int id)
+        public static DataWrapper<Comic> getComicsForCreator(int creatorId, string order, int limit, int offset)
+        {
+            string url = String.Format("{0}/v1/public/creators/{1}/comics?orderBy={2}&limit={3}&offset={4}", endPoint, creatorId, order, limit, offset);
+            WebResponse response = apiCall(url, true);
+
+            return parseAsDataWrapper<Comic>(response);
+        }
+
+        public static DataWrapper<Comic> getComic(int id)
         {
             string url = String.Format("{0}/v1/public/comics/{1}", endPoint, id);
             WebResponse response = apiCall(url, false);
 
-            return parseAsComicDataWrapper(response);
+            return parseAsDataWrapper<Comic>(response);
 
         }
 
@@ -73,16 +105,13 @@ namespace Marvel.MarvelApi
             return response;
         }
 
-        private static ComicDataWrapper parseAsComicDataWrapper(WebResponse response)
+        private static DataWrapper<Data> parseAsDataWrapper<Data>(WebResponse response)
         {
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 string result = reader.ReadToEnd();
-                JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
-                jsonSettings.MaxDepth = 10;
-                jsonSettings.DateParseHandling = DateParseHandling.DateTime;
-                ComicDataWrapper cdw = JsonConvert.DeserializeObject<ComicDataWrapper>(result, jsonSettings);
-                return cdw;
+                DataWrapper<Data> dataWrapper = new JavaScriptSerializer().Deserialize<DataWrapper<Data>>(result);
+                return dataWrapper;
             }
         }
 

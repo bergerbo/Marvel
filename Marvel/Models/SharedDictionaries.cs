@@ -18,11 +18,28 @@ namespace Marvel.Models
         public string url;
     }
 
+    public class SeriesList
+    {
+        public int? available;
+        public int? returned;
+        public string collectionURI;
+        public SeriesSummary[] items;
+    }
+
     public class SeriesSummary
     {
         public string resourceURI;
         public string name;
     }
+
+    public class ComicList
+    {
+        public int? available;
+        public int? returned;
+        public string collectionURI;
+        public ComicSummary[] items;
+    }
+
 
     public class ComicSummary
     {
@@ -33,7 +50,7 @@ namespace Marvel.Models
     public class ComicDate
     {
         public string type;
-        public DateTime? date;
+        public string date;
     }
 
     public class ComicPrice

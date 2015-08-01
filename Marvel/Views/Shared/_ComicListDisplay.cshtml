@@ -1,0 +1,10 @@
+﻿@model Marvel.Models.DataContainer<Marvel.Models.Comic>
+
+<div class="row">
+    @foreach (Marvel.Models.Comic comic in Model.results)
+    {
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            @{Html.RenderPartial("_ComicThumbnail", comic);}
+        </div>
+                }
+</div>

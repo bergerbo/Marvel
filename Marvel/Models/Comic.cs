@@ -14,7 +14,7 @@ namespace Marvel.Models
         double issueNumber;
         public string variantDescription;
         public string description;
-        public DateTime? modified;
+        public string modified;
         public string isbn;
         public string upc;
         public string diamondCode;

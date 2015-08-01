@@ -1,0 +1,11 @@
+﻿@model Marvel.Models.DataContainer<Marvel.Models.Creator>
+
+
+<div class="row">
+    @foreach (Marvel.Models.Creator creator in Model.results)
+            {
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            @{Html.RenderPartial("_CreatorThumbnail", creator);}
+        </div>
+                }
+</div>
