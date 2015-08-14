@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Marvel.Models;
 using System.Web.Script.Serialization;
+using System.Reflection;
 
 namespace Marvel.MarvelApi
 {
@@ -68,14 +69,46 @@ namespace Marvel.MarvelApi
             return parseAsDataWrapper<Creator>(response);
         }
 
+
+
         public static DataWrapper<Comic> getComics(string order, int limit, int offset)
         {
+            
             string url = String.Format("{0}/v1/public/comics?orderBy={1}&limit={2}&offset={3}",endPoint, order, limit, offset);
             WebResponse response = apiCall(url, true);
 
             return parseAsDataWrapper<Comic>(response);
         }
 
+        public static DataWrapper<Comic> getComics(object parameters)
+        {
+            Type t = parameters.GetType();
+            PropertyInfo[] properties = t.GetProperties();
+            bool any = false;
+
+            StringBuilder sb = new StringBuilder(endPoint);
+            sb.Append("/v1/public/comics");
+
+            if (properties.Length > 0)
+            {
+                sb.Append("?");
+                any = true;
+
+                foreach (PropertyInfo property in properties)
+                {
+                    sb.Append(property.Name);
+                    sb.Append("=");
+                    sb.Append(property.GetValue(parameters).ToString());
+                    sb.Append("&");
+                }
+
+                sb.Remove(sb.Length - 1, 1);
+            }
+            string url = sb.ToString();
+            WebResponse response = apiCall(url, any);
+
+            return parseAsDataWrapper<Comic>(response);
+        }
 
         public static DataWrapper<Comic> getComicsForCreator(int creatorId, string order, int limit, int offset)
         {

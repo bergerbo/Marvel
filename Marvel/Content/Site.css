@@ -9,9 +9,21 @@
     padding-right: 15px;
 }*/
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
+
+/*  Search Bar */
+.search-heading {
+    padding : 0px 15px;
+}
+
+.col-search h3 {
+    padding-top:6px;
+    margin-top:6px;
+}
+
+.col-search {
+    height:50px;
+}
+
 .dl-horizontal dt {
     white-space: normal;
 }

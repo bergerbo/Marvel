@@ -15,6 +15,12 @@ namespace Marvel.Controllers
             return View(cdw.data.results.First());
         }
 
+        public ActionResult Search(string search_term)
+        {
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(new { titleStartsWith=search_term, orderBy = "-focDate", limit = 8, offset = 4 });
+
+            return PartialView("_ComicListDisplay", cdw.data);
+        }
 
         public ActionResult Comics(string order, int limit, int offset)
         {
