@@ -1,11 +1,13 @@
 ﻿@model Marvel.Models.Comic
 
-<a href="@Url.Action("Comic","Comics", new { id = Model.id })">
-    <div class="thumbnail comic">
-        <img src="@(Model.thumbnail.path + "/standard_xlarge." + Model.thumbnail.extension)" alt="image">
-        <div class="caption">
-            <h4>@Model.title</h4>
-            <p>@Model.description</p>
+<div class="thumbnail-container">
+    <a href="@Url.Action("Comic","Comics", new { id = Model.id })">
+        <div class="thumbnail thumbnail-comic btn btn-default">
+            <img src="@(Model.thumbnail.path + "/standard_xlarge." + Model.thumbnail.extension)" alt="image">
+            <div class="caption">
+                <h4>@Model.title</h4>
+                <p>@Model.description</p>
+            </div>
         </div>
-    </div>
-</a>
+    </a>
+</div>

@@ -15,25 +15,46 @@ namespace Marvel.Controllers
             return View(cdw.data.results.First());
         }
 
-        public ActionResult Search(string search_term)
+        public ActionResult Search(string searchComics)
         {
-            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(new { titleStartsWith=search_term, orderBy = "-focDate", limit = 8, offset = 4 });
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(new { titleStartsWith=searchComics, orderBy = "-focDate", limit = 4, offset = 0 });
 
-            return PartialView("_ComicListDisplay", cdw.data);
+            return PartialView("_ComicsList", cdw.data);
         }
 
-        public ActionResult Comics(string order, int limit, int offset)
+        public ActionResult Comics(string orderBy, int limit, int offset)
         {
-            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(order, limit, offset);
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(new { orderBy, limit, offset });
 
-            return PartialView("_ComicListDisplay", cdw.data);
+            return PartialView("_ComicsList", cdw.data);
         }
 
-        public ActionResult ComicsForCreator(int creatorId, string order, int limit, int offset)
+        public ActionResult ComicsRow(string titleStartsWith, string orderBy, int limit, int offset)
         {
-            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComicsForCreator(creatorId, order, limit, offset);
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComics(new { titleStartsWith, orderBy, limit, offset });
 
-            return PartialView("_ComicListDisplay", cdw.data);
+            return PartialView("_ComicsRow", cdw.data);
+        }
+
+        public ActionResult ComicsRowForCreator(int creatorId, string titleStartsWith, string orderBy, int limit, int offset)
+        {
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComicsForCreator(creatorId, new { titleStartsWith, orderBy, limit, offset });
+
+            return PartialView("_ComicsRow", cdw.data);
+        }
+
+        public ActionResult ComicsForCreator(int creatorId, string orderBy, int limit, int offset)
+        {
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComicsForCreator(creatorId, new { orderBy, limit, offset });
+
+            return PartialView("_ComicsList", cdw.data);
+        }
+
+        public ActionResult SearchForCreator(int creatorId, string titleStartsWith)
+        {
+            DataWrapper<Comic> cdw = MarvelApi.MarvelApiInterface.getComicsForCreator(creatorId, new { titleStartsWith = titleStartsWith, orderBy = "-focDate", limit = 4, offset = 0 });
+
+            return PartialView("_ComicsList", cdw.data);
         }
     }
 }

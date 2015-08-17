@@ -143,6 +143,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\ajax-loader-search.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -155,11 +156,14 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\marvel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -171,12 +175,14 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_ComicListDisplay.cshtml" />
+    <Content Include="Views\Shared\_ComicsList.cshtml" />
     <Content Include="Views\Shared\_ComicThumbnail.cshtml" />
     <Content Include="Views\Comics\Comic.cshtml" />
-    <Content Include="Views\Shared\_CreatorListDisplay.cshtml" />
+    <Content Include="Views\Shared\_CreatorsList.cshtml" />
     <Content Include="Views\Shared\_CreatorThumbnail.cshtml" />
     <Content Include="Views\Creators\Creator.cshtml" />
+    <Content Include="Views\Shared\_ComicsRow.cshtml" />
+    <Content Include="Views\Shared\_CreatorsRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,10 @@
+﻿@model Marvel.Models.DataContainer<Marvel.Models.Comic>
+
+<input type="hidden" value="@Model.total" id="totalResultsComics" />
+<div class="row">
+    @{Html.RenderPartial("_ComicsRow", Model);}
+
+    <div type="button" id="loadMoreComics" class="col-xs-12 " style="padding:15px"> 
+        <div type="button" class="btn btn-default btn-list">More !</div>
+    </div>
+</div>

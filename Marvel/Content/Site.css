@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background: black;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -11,6 +12,11 @@
 
 
 /*  Search Bar */
+
+.input-disabled{
+    background-color:#EBEBE4;
+}
+
 .search-heading {
     padding : 0px 15px;
 }
@@ -24,6 +30,12 @@
     height:50px;
 }
 
+/* Lists */
+.btn-list {
+    width:100%;
+}
+
+ /* Ressource views */
 .dl-horizontal dt {
     white-space: normal;
 }
@@ -32,28 +44,28 @@
     margin-top:40px;
 }
 
+.left-col img {
+    width:100%;
+}
+
+/* Thumbnails*/
+
 .thumbnail {
-    overflow:hidden
-}
-
-.thumbnail .comic {
+    overflow:hidden;
     height: 300px;
+    
 }
 
-.thumbnail .creator {
-    height: 280px;
+.thumbnail-container a{
+    text-decoration:none;
 }
-
-
 .thumbnail h4, .thumbnail p {
     white-space:nowrap;
     overflow:hidden;    
     text-overflow:ellipsis;
 }
 
-.left-col img {
-    width:100%;
-}
+
 
 
 /* Set width on the form input elements since they're 100% wide by default */

@@ -8,6 +8,7 @@ using System.IO;
 using Marvel.Models;
 using System.Web.Script.Serialization;
 using System.Reflection;
+using System.Linq;
 
 namespace Marvel.MarvelApi
 {
@@ -17,13 +18,10 @@ namespace Marvel.MarvelApi
         private static string privateKey;
         private static string endPoint = "http://gateway.marvel.com";
 
-        private static MD5 mdhash;
-
         public static void Init()
         {
             publicKey = System.Configuration.ConfigurationManager.AppSettings["MarvelApiPublic"];
             privateKey = System.Configuration.ConfigurationManager.AppSettings["MarvelApiPrivate"];
-            mdhash = MD5.Create();
         }
 
         public static KeyHash generateKeyHash()
@@ -33,6 +31,8 @@ namespace Marvel.MarvelApi
             keyHash.ts = DateTime.Now.ToString("yyyyMMddHHmm");
 
             string concat = keyHash.ts + privateKey + publicKey;
+
+            MD5 mdhash = MD5.Create();
             byte[] md5 = mdhash.ComputeHash(Encoding.UTF8.GetBytes(concat));
 
             StringBuilder sb = new StringBuilder();
@@ -46,10 +46,9 @@ namespace Marvel.MarvelApi
             return keyHash;
         }
 
-        public static DataWrapper<Creator> getCreators(string order, int limit, int offset)
+        internal static DataWrapper<Creator> getCreators(object parameters)
         {
-            string url = String.Format("{0}/v1/public/creators?orderBy={1}&limit={2}&offset={3}", endPoint, order, limit, offset);
-            WebResponse response = apiCall(url, true);
+            WebResponse response = apiCall(endPoint + "/v1/public/creators", parameters);
 
             return parseAsDataWrapper<Creator>(response);
         }
@@ -69,51 +68,17 @@ namespace Marvel.MarvelApi
             return parseAsDataWrapper<Creator>(response);
         }
 
-
-
-        public static DataWrapper<Comic> getComics(string order, int limit, int offset)
-        {
-            
-            string url = String.Format("{0}/v1/public/comics?orderBy={1}&limit={2}&offset={3}",endPoint, order, limit, offset);
-            WebResponse response = apiCall(url, true);
-
-            return parseAsDataWrapper<Comic>(response);
-        }
-
         public static DataWrapper<Comic> getComics(object parameters)
         {
-            Type t = parameters.GetType();
-            PropertyInfo[] properties = t.GetProperties();
-            bool any = false;
-
-            StringBuilder sb = new StringBuilder(endPoint);
-            sb.Append("/v1/public/comics");
-
-            if (properties.Length > 0)
-            {
-                sb.Append("?");
-                any = true;
-
-                foreach (PropertyInfo property in properties)
-                {
-                    sb.Append(property.Name);
-                    sb.Append("=");
-                    sb.Append(property.GetValue(parameters).ToString());
-                    sb.Append("&");
-                }
-
-                sb.Remove(sb.Length - 1, 1);
-            }
-            string url = sb.ToString();
-            WebResponse response = apiCall(url, any);
+            WebResponse response = apiCall(endPoint+"/v1/public/comics",parameters);
 
             return parseAsDataWrapper<Comic>(response);
         }
 
-        public static DataWrapper<Comic> getComicsForCreator(int creatorId, string order, int limit, int offset)
+        public static DataWrapper<Comic> getComicsForCreator(int creatorId, object parameters)
         {
-            string url = String.Format("{0}/v1/public/creators/{1}/comics?orderBy={2}&limit={3}&offset={4}", endPoint, creatorId, order, limit, offset);
-            WebResponse response = apiCall(url, true);
+            string url = String.Format("{0}/v1/public/creators/{1}/comics", endPoint, creatorId);
+            WebResponse response = apiCall(url, parameters);
 
             return parseAsDataWrapper<Comic>(response);
         }
@@ -125,6 +90,37 @@ namespace Marvel.MarvelApi
 
             return parseAsDataWrapper<Comic>(response);
 
+        }
+
+        private static WebResponse apiCall(string url, object parameters)
+        {
+            Type t = parameters.GetType();
+            PropertyInfo[] properties = t.GetProperties().ToArray();
+            bool any = false;
+
+            StringBuilder sb = new StringBuilder(url);
+
+            if (properties.Length > 0)
+            {
+                sb.Append("?");
+                any = true;
+
+                foreach (PropertyInfo property in properties)
+                {
+                    var val = property.GetValue(parameters);
+                    if (val != null && val.ToString() != "")
+                    {
+                        sb.Append(property.Name);
+                        sb.Append("=");
+                        sb.Append(val.ToString());
+                        sb.Append("&");
+                    }
+                }
+
+                sb.Remove(sb.Length - 1, 1);
+            }
+
+            return  apiCall(sb.ToString(), any);
         }
 
         private static WebResponse apiCall(string url, bool withParams)

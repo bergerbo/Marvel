@@ -17,11 +17,25 @@ namespace Marvel.Controllers
         }
 
 
-        public ActionResult Creators(string order, int limit, int offset)
+        public ActionResult Creators(string orderBy, int limit, int offset)
         {
-            DataWrapper<Creator> cdw = MarvelApi.MarvelApiInterface.getCreators(order, limit, offset);
+            DataWrapper<Creator> cdw = MarvelApi.MarvelApiInterface.getCreators(new { orderBy = orderBy, limit = limit, offset = offset });
 
-            return PartialView("_CreatorListDisplay", cdw.data);
+            return PartialView("_CreatorsList", cdw.data);
+        }
+
+        public ActionResult CreatorsRow(string nameStartsWith, string orderBy, int limit, int offset)
+        {
+            DataWrapper<Creator> cdw = MarvelApi.MarvelApiInterface.getCreators(new { nameStartsWith = nameStartsWith, orderBy = orderBy, limit = limit, offset = offset });
+
+            return PartialView("_CreatorsRow", cdw.data);
+        }
+
+        public ActionResult Search(string searchCreators)
+        {
+            DataWrapper<Creator> cdw = MarvelApi.MarvelApiInterface.getCreators(new { nameStartsWith = searchCreators, orderBy = "-modified", limit = 4, offset = 0 });
+
+            return PartialView("_CreatorsList", cdw.data);
         }
     }
 }

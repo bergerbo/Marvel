@@ -4,6 +4,84 @@
     ViewBag.Title = "Home Page";
 }
 
+@section scripts{
+    <script type="text/javascript">
+
+        var offsetComics = 0;
+        var titleStartsWithComics = "";
+        var totalResultsComics = 0;
+
+        var offsetCreators = 0;
+        var nameStartsWithCreators = "";
+        var totalResultsCreators = 0;
+
+        function startFetchingCreators() {
+            $("#creatorsLoading").css("visibility","visible");
+            $("#loadMoreCreators").click(false);
+            $("#searchCreators").attr('readonly', true);
+            $('#searchCreators').addClass('input-disabled');
+        }
+
+        function stopFetchingCreators() {
+            $("#creatorsLoading").css("visibility", "hidden");
+            $("#searchCreators").attr('readonly', false);
+            $('#searchCreators').removeClass('input-disabled');
+        }
+
+        function refreshAndRebindCreators() {
+            stopFetchingCreators();
+            offsetCreators = 4;
+            nameStartsWithCreators = $("#searchCreators").val();
+            totalResultsCreators = $("#totalResultsCreators").val();
+            $("#loadMoreCreators").click(function () {
+                startFetchingCreators();
+                $.get("@(Url.Action("CreatorsRow","Creators"))", { nameStartsWith: nameStartsWithCreators, orderBy: "-modified", limit: 4, offset: offsetCreators }, function (data) {
+                    $("#loadMoreCreators").before(data);
+                    offsetCreators += 4;
+                    stopFetchingCreators();
+                }, "html");
+            });
+        }
+
+
+        function startFetchingComics() {
+            $("#comicsLoading").css("visibility","visible");
+            $("#loadMoreComics").click(false);
+            $("#searchComics").attr('readonly', true);
+            $('#searchComics').addClass('input-disabled');
+        }
+
+        function stopFetchingComics() {
+            $("#comicsLoading").css("visibility", "hidden");
+            $("#searchComics").attr('readonly', false);
+            $('#searchComics').removeClass('input-disabled');
+        }
+
+        function refreshAndRebindComics() {
+            stopFetchingComics();
+            offsetComics = 4;
+            titleStartsWithComics = $("#searchComics").val();
+            totalResultsComics = $("#totalResultsComics").val();
+            $("#loadMoreComics").click(function () {
+                startFetchingComics();
+                $.get("@(Url.Action("ComicsRow","Comics"))", { titleStartsWith: titleStartsWithComics, orderBy: "-focDate", limit: 4, offset: offsetComics }, function (data) {
+                    $("#loadMoreComics").before(data);
+                    offsetComics += 4;
+                    stopFetchingComics();
+                }, "html");
+            });
+        }
+
+        $(document).ready(function () {
+            $("#comicsResults").load("@Url.Action("Comics","Comics")", { orderBy: "-focDate", limit: 4, offset: offsetComics }, refreshAndRebindComics);
+            $("#creatorsResults").load("@Url.Action("Creators","Creators")", { orderBy: "-modified", limit: 4, offset: offsetCreators }, refreshAndRebindCreators);
+        });
+
+
+    </script>
+}
+
+
 <div class="jumbotron">
     <h1>Marvel Comics & Creators </h1>
     <p class="lead">Access info about your favorite Comics and Comic Creators here, thanks to the Marvel Developer API.</p>
@@ -17,36 +95,64 @@
 <div class="panel panel-default">
     <div class="panel-heading search-heading">
         <div class="row panel-title">
-            <div class="col-sm-9 col-search">
+            <div class="col-sm-8 col-search">
                 <h3>Recent Comics</h3>
             </div>
-            <div class="col-sm-3 col-md-3 pull-right col-search">
-                @using (Ajax.BeginForm("Search", "Comics", null, new AjaxOptions { UpdateTargetId = "comicResults" }, new { @class = "navbar-form", role = "search" }))
-                {
-                    string search_term = "";
-                    <div class="input-group">
-                        @Html.TextBoxFor(x => search_term, new { @class="form-control", placeholder="Search", name="search_term",id="search_term" })
-                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                        </div>
+            <div class="col-sm-4 pull-right col-search">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <img id="comicsLoading" src="~/Images/ajax-loader-search.gif" style="visibility:hidden;width:26px;margin:12px 0px;" />
                     </div>
-                  }
+                    <div class="col-sm-9">
+                        @using (Ajax.BeginForm("Search", "Comics", null, new AjaxOptions { UpdateTargetId = "comicsResults", OnBegin = "startFetchingComics", OnComplete = "refreshAndRebindComics" }, new { @class = "navbar-form", role = "search" }))
+                        {
+                            string titleStartsWith = "";
+                            <div class="input-group">
+                                @Html.TextBoxFor(x => titleStartsWith, new { @class = "form-control", placeholder = "Search", name = "searchComics", id = "searchComics" })
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="panel-body container-fluid">
-        <div id="comicResults">
-            @(Html.Action("Comics", "Comics", new { order = "-focDate", limit = 4, offset = 0 }))
-        </div>
+        <div id="comicsResults"></div>
     </div>
 </div>
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Active Creators</h3>
+    <div class="panel-heading search-heading">
+        <div class="row panel-title">
+            <div class="col-sm-8 col-search">
+                <h3>Recent Creators</h3>
+            </div>
+            <div class="col-sm-4 pull-right col-search">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <img id="creatorsLoading" src="~/Images/ajax-loader-search.gif" style="visibility:hidden;width:26px;margin:12px 0px;" />
+                    </div>
+                    <div class="col-sm-9">
+                        @using (Ajax.BeginForm("Search", "Creators", null, new AjaxOptions { UpdateTargetId = "creatorsResults", OnBegin = "startFetchingCreators", OnComplete = "refreshAndRebindCreators" }, new { @class = "navbar-form", role = "search" }))
+                        {
+                            string searchCreators = "";
+                            <div class="input-group">
+                                @Html.TextBoxFor(x => searchCreators, new { @class = "form-control", placeholder = "Search", name = "searchCreators", id = "searchCreators" })
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="panel-body container-fluid">
-        @(Html.Action("Creators", "Creators", new { order = "-modified", limit = 4, offset = 0 }))
+        <div id="creatorsResults"></div>
     </div>
 </div>
 
